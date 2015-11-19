@@ -1,0 +1,20 @@
+﻿Build started 11/19/2015 2:19:10 PM.
+     1>Project "C:\Users\huiba_000\Downloads\class\cpp\ex\tetris3_3\tetris3_3\tetris3_3.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ans.cpp
+         ans.cpp
+     1>c:\users\huiba_000\downloads\class\cpp\ex\tetris3_3\tetris3_3\ans.cpp(220): warning C4244: '인수' : 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\huiba_000\downloads\class\cpp\ex\tetris3_3\tetris3_3\ans.cpp(352): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _kbhit. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\conio.h(133) : 'kbhit' 선언을 참조하십시오.
+     1>c:\users\huiba_000\downloads\class\cpp\ex\tetris3_3\tetris3_3\ans.cpp(354): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+     1>c:\users\huiba_000\downloads\class\cpp\ex\tetris3_3\tetris3_3\ans.cpp(357): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\huiba_000\Downloads\class\cpp\ex\tetris3_3\Debug\tetris3_3.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\huiba_000\Downloads\class\cpp\ex\tetris3_3\Debug\tetris3_3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\huiba_000\Downloads\class\cpp\ex\tetris3_3\Debug\tetris3_3.lib" /MACHINE:X86 Debug\ans.obj
+         tetris3_3.vcxproj -> C:\Users\huiba_000\Downloads\class\cpp\ex\tetris3_3\Debug\tetris3_3.exe
+     1>Done Building Project "C:\Users\huiba_000\Downloads\class\cpp\ex\tetris3_3\tetris3_3\tetris3_3.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.70
