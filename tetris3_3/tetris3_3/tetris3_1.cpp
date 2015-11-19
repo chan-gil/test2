@@ -1,70 +1,70 @@
 #include <iostream>
-#include <windows.h> //GetStdHandle(), Sleep(), SetConsolePosition() ÇÔ¼ö »ç¿ë
-#include <conio.h> //getch()¿Í kbhit() ÇÔ¼ö »ç¿ë
+#include <windows.h> //GetStdHandle(), Sleep(), SetConsolePosition() í•¨ìˆ˜ ì‚¬ìš©
+#include <conio.h> //getch()ì™€ kbhit() í•¨ìˆ˜ ì‚¬ìš©
 
-#define ESC 27 //°ÔÀÓ Á¾·á
-#define LEFT 75 //¿ŞÂÊ È­»ìÇ¥ Å° ASCII°ª
-#define RIGHT 77 // ¿À¸¥ÂÊ È­»ìÇ¥ Å° ASCII°ª
-#define DOWN 80 //¾Æ·¡ È­»ìÇ¥ Å° ASCII°ª
+#define ESC 27 //ê²Œì„ ì¢…ë£Œ
+#define LEFT 75 //ì™¼ìª½ í™”ì‚´í‘œ í‚¤ ASCIIê°’
+#define RIGHT 77 // ì˜¤ë¥¸ìª½ í™”ì‚´í‘œ í‚¤ ASCIIê°’
+#define DOWN 80 //ì•„ë˜ í™”ì‚´í‘œ í‚¤ ASCIIê°’
+//
+#define BOARD_HEIGHT 22 //ê²Œì„ ë³´ë“œ ë†’ì´
+#define BOARD_WIDTH  12 //ê²Œì„ ë³´ë“œ ë„“ì´ 
 
-#define BOARD_HEIGHT 22 //°ÔÀÓ º¸µå ³ôÀÌ
-#define BOARD_WIDTH  12 //°ÔÀÓ º¸µå ³ĞÀÌ 
-
-//°ÔÀÓ º¸µå ±×¸®±â ½ÃÀÛ À§Ä¡
+//ê²Œì„ ë³´ë“œ ê·¸ë¦¬ê¸° ì‹œì‘ ìœ„ì¹˜
 #define BOARD_STARTX 20  
 #define BOARD_STARTY 2
 
-//´ÙÀ½ ºí·° ±×¸®±â ½ÃÀÛ À§Ä¡
+//ë‹¤ìŒ ë¸”ëŸ­ ê·¸ë¦¬ê¸° ì‹œì‘ ìœ„ì¹˜
 #define NEXTBLOCK_STARTX 50  
 #define NEXTBLOCK_STARTY 3
 #define NEXTBLOCK_SIZEX 8
 #define NEXTBLOCK_SIZEY 5
 
-//Á¡¼ö ±×¸®±â ½ÃÀÛ À§Ä¡
+//ì ìˆ˜ ê·¸ë¦¬ê¸° ì‹œì‘ ìœ„ì¹˜
 #define SCORE_STARTX 50
 #define SCORE_STARTY 21
 #define SCORE_SIZEX 8
 #define SCORE_SIZEY 3
 
-//ºí·° ½ÃÀÛ À§Ä¡
+//ë¸”ëŸ­ ì‹œì‘ ìœ„ì¹˜
 #define START_ARRAYX 4
 #define START_ARRAYY 1
 
-//³¡³»´Â À§Ä¡ 
+//ëë‚´ëŠ” ìœ„ì¹˜ 
 #define END_X 20
 #define END_Y 25
 
 using namespace std;
 
-void initGame(); //°ÔÀÓ ÃÊ±âÈ­
-void gotoXY(int x, int y); //ÄÜ¼Ö È­¸é¿¡¼­ Ä¿¼­¸¦ Æ¯Á¤ À§Ä¡·Î ÀÌµ¿
-void drawGame(int blockX, int blockY); // °ÔÀÓ È­¸éÀ» ±×¸®´Â ÇÔ¼ö
-int getGameAction(void); // °ÔÀÓÀÇ ±â´ÉÀ» ¼±ÅÃÇÏ´Â ÇÔ¼ö
-void move(int key);		// ºí·° ÀÌµ¿ ÇÔ¼ö
-void reach();			// ºí·°ÀÌ ¸¶Áö¸· Ä­¿¡ µµ´ŞÇÒ ¶§ ½ÇÇà
-void fall();			// ÀÏÁ¤ÇÑ °£°İÀ¸·Î ¶³¾îÁö´Â ÇÔ¼ö
+void initGame(); //ê²Œì„ ì´ˆê¸°í™”
+void gotoXY(int x, int y); //ì½˜ì†” í™”ë©´ì—ì„œ ì»¤ì„œë¥¼ íŠ¹ì • ìœ„ì¹˜ë¡œ ì´ë™
+void drawGame(int blockX, int blockY); // ê²Œì„ í™”ë©´ì„ ê·¸ë¦¬ëŠ” í•¨ìˆ˜
+int getGameAction(void); // ê²Œì„ì˜ ê¸°ëŠ¥ì„ ì„ íƒí•˜ëŠ” í•¨ìˆ˜
+void move(int key);		// ë¸”ëŸ­ ì´ë™ í•¨ìˆ˜
+void reach();			// ë¸”ëŸ­ì´ ë§ˆì§€ë§‰ ì¹¸ì— ë„ë‹¬í•  ë•Œ ì‹¤í–‰
+void fall();			// ì¼ì •í•œ ê°„ê²©ìœ¼ë¡œ ë–¨ì–´ì§€ëŠ” í•¨ìˆ˜
 
 enum GameAction{MOVE_LEFT=1, MOVE_RIGHT, MOVE_DOWN, MOVE_DROP, GAME_QUIT};
-int  gameAction; //°ÔÀÓ ±â´É ÀúÀå
-int blockX=4, blockY=1;	 //»ı¼ºµÇ´Â ºí·°ÀÇ ÃÊ±â À§Ä¡ 
+int  gameAction; //ê²Œì„ ê¸°ëŠ¥ ì €ì¥
+int blockX=4, blockY=1;	 //ìƒì„±ë˜ëŠ” ë¸”ëŸ­ì˜ ì´ˆê¸° ìœ„ì¹˜ 
 int  gameScore=0;
 
-//Ãß°¡ 
-int set[BOARD_WIDTH][BOARD_HEIGHT];		//Å×Æ®¸®½º ÆÇ ÀüÃ¼¸¦ 2Â÷¿ø ¹è¿­·Î ¼±¾ğ
+//ì¶”ê°€ 
+int set[BOARD_WIDTH][BOARD_HEIGHT];		//í…ŒíŠ¸ë¦¬ìŠ¤ íŒ ì „ì²´ë¥¼ 2ì°¨ì› ë°°ì—´ë¡œ ì„ ì–¸
 
 int main(void){
     
-	initGame();	// °ÔÀÓ ÃÊ±âÈ­
+	initGame();	// ê²Œì„ ì´ˆê¸°í™”
 
-	while(gameAction != GAME_QUIT){			// esc¸¦ ÀÔ·Â ½Ã ¹İº¹¹® Å»Ãâ
-		drawGame(blockX,blockY);			// ºí·°À» ±×·ÁÁÜ
-		gameAction=getGameAction();			// »ç¿ëÀÚ ÀÔ·Â °ª ÆÇº°
-		move(gameAction);					// ÀÔ·Â °ª¿¡ µû¸¥ ÀÌµ¿
-		fall();								// ÀÏÁ¤ÇÑ °£°İÀÇ ÀÌµ¿
+	while(gameAction != GAME_QUIT){			// escë¥¼ ì…ë ¥ ì‹œ ë°˜ë³µë¬¸ íƒˆì¶œ
+		drawGame(blockX,blockY);			// ë¸”ëŸ­ì„ ê·¸ë ¤ì¤Œ
+		gameAction=getGameAction();			// ì‚¬ìš©ì ì…ë ¥ ê°’ íŒë³„
+		move(gameAction);					// ì…ë ¥ ê°’ì— ë”°ë¥¸ ì´ë™
+		fall();								// ì¼ì •í•œ ê°„ê²©ì˜ ì´ë™
 		Sleep(80);							// delay
 	}
 
-	gotoXY(END_X, END_Y);	// Á¾·á ¹®ÀåÀÌ °ãÄ¡Áö ¾Ê°Ô Ä¿¼­¸¦ ÀÌµ¿½ÃÄÑÁÜ
+	gotoXY(END_X, END_Y);	// ì¢…ë£Œ ë¬¸ì¥ì´ ê²¹ì¹˜ì§€ ì•Šê²Œ ì»¤ì„œë¥¼ ì´ë™ì‹œì¼œì¤Œ
 	return 0;
 }
 
@@ -72,7 +72,7 @@ void gotoXY(int x, int y){
 	COORD Pos = {x, y};
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
-//Å×Æ®¸®½º °ÔÀÓ Å×µÎ¸®¿¡ 1, ³»ºÎ¸¦ 0À¸·Î ÃÊ±âÈ­ÇÑ´Ù.
+//í…ŒíŠ¸ë¦¬ìŠ¤ ê²Œì„ í…Œë‘ë¦¬ì— 1, ë‚´ë¶€ë¥¼ 0ìœ¼ë¡œ ì´ˆê¸°í™”í•œë‹¤.
 void initGame(){
 	for(int i=0; i<BOARD_HEIGHT; i++){
 		for(int j=0; j<BOARD_WIDTH; j++){
@@ -87,36 +87,36 @@ void initGame(){
 }
 
 void drawGame(int blockX, int blockY){
-	//»õ·Î¿î ºí¶ôÀº set[4][1]¿¡¼­ ½ÃÀÛµÈ´Ù
+	//ìƒˆë¡œìš´ ë¸”ë½ì€ set[4][1]ì—ì„œ ì‹œì‘ëœë‹¤
 	for(int i=0; i<BOARD_HEIGHT; i++){
 		gotoXY(BOARD_STARTX, BOARD_STARTY+i);
-		for(int j=0; j<BOARD_WIDTH; j++){   // ¡á¡á¡á¡á ºí·Ï set[4][1]¿¡ »ı¼º 
+		for(int j=0; j<BOARD_WIDTH; j++){   // â– â– â– â–  ë¸”ë¡ set[4][1]ì— ìƒì„± 
 			if((j>=blockX&&j<blockX+4)&&((i==blockY)){
-				cout << "¡á";
+				cout << "â– ";
 			}
-			//0À¸·Î ÇÒ´ç¹ŞÀº ºÎºĞ ¿©¹éÃ³¸®
+			//0ìœ¼ë¡œ í• ë‹¹ë°›ì€ ë¶€ë¶„ ì—¬ë°±ì²˜ë¦¬
 			else if(set[i][j]==0){   
 				cout << "  ";
 			}
-			// 1·Î ¹ŞÀº ºÎºĞ ¹Ú½º ( Å×µÎ¸® )
+			// 1ë¡œ ë°›ì€ ë¶€ë¶„ ë°•ìŠ¤ ( í…Œë‘ë¦¬ )
 			else{
-				cout << "¡à";
+				cout << "â–¡";
 			}
 		}
 	}
 
 
-	// ´ÙÀ½ ºí·°
+	// ë‹¤ìŒ ë¸”ëŸ­
 	gotoXY(NEXTBLOCK_STARTX, NEXTBLOCK_STARTY-1);
 	cout << "  [NEXT BLOCK]";
 	for(int i=0; i<NEXTBLOCK_SIZEY; i++){
 		gotoXY(NEXTBLOCK_STARTX, NEXTBLOCK_STARTY+i);
 		for(int j=0; j<NEXTBLOCK_SIZEX; j++){
 			if(i==0||j==0||i==(NEXTBLOCK_SIZEY-1)||j==(NEXTBLOCK_SIZEX-1)){
-				cout << "¡à";
+				cout << "â–¡";
 			}
 			else if(i==2&&j>=2&&j<=5){
-				cout << "¡á";
+				cout << "â– ";
 			}
 			else{
 				cout << "  ";
@@ -131,11 +131,11 @@ void drawGame(int blockX, int blockY){
 		gotoXY(SCORE_STARTX, SCORE_STARTY+i);
 		for(int j=0; j<SCORE_SIZEX; j++){
 			if(i==0||j==0||i==(SCORE_SIZEY-1)||j==(SCORE_SIZEX-1)){
-				cout << "¡à";
+				cout << "â–¡";
 			}
-			// ¾ÕÀÚ¸® ¼ö 0µµ Æ÷ÇÔµÇ¾î¾ß ÇÏ¹Ç·Î 
-			// 100º¸´Ù ÀÛÀ¸¸é ¾Õ¿¡ 0À» 10º¸´Ù ÀÛÀ¸¸é 0µÎ°³¸¦ ... 
-			// ÀÌ¿Í °°Àº ½ÄÀ¸·Î ½ºÄÚ¾î Ãâ·Â
+			// ì•ìë¦¬ ìˆ˜ 0ë„ í¬í•¨ë˜ì–´ì•¼ í•˜ë¯€ë¡œ 
+			// 100ë³´ë‹¤ ì‘ìœ¼ë©´ ì•ì— 0ì„ 10ë³´ë‹¤ ì‘ìœ¼ë©´ 0ë‘ê°œë¥¼ ... 
+			// ì´ì™€ ê°™ì€ ì‹ìœ¼ë¡œ ìŠ¤ì½”ì–´ ì¶œë ¥
 			else if(i==1&&j==3){
 				if(gameScore>=100){
 					cout << "0" << gameScore;
@@ -165,11 +165,11 @@ void drawGame(int blockX, int blockY){
 
 int getGameAction(void){
 	int keyValue,act=0;
-	if(kbhit() != 0){ //Å°º¸µå¸¦ ´­·¶´ÂÁö È®ÀÎÇÔ 
+	if(kbhit() != 0){ //í‚¤ë³´ë“œë¥¼ ëˆŒë €ëŠ”ì§€ í™•ì¸í•¨ 
 		
 		keyValue=getch(); 
-		if (keyValue == 224){ //Æ¯¼ö Å°¸¦ ´­·¶À» ¶§ ¹öÆÛ¿¡ 2Byte°¡ ¹ß»ıÇÔ, Ã¹¹øÂ° °ªÀº 224°ªÀ» ¹ß»ıÇÏ°í µÎ¹øÂ° °ªÀº Æ¯¼öÅ°¿¡ µû¶ó ´Ù¸§
-			keyValue=getch(); //Æ¯¼ö Å°¸¦ È®ÀÎÇÏ±â À§ÇØ 2¹øÀÇ getch()ÇÔ¼ö¸¦ È£ÃâÇØ¾ß ÇÔ
+		if (keyValue == 224){ //íŠ¹ìˆ˜ í‚¤ë¥¼ ëˆŒë €ì„ ë•Œ ë²„í¼ì— 2Byteê°€ ë°œìƒí•¨, ì²«ë²ˆì§¸ ê°’ì€ 224ê°’ì„ ë°œìƒí•˜ê³  ë‘ë²ˆì§¸ ê°’ì€ íŠ¹ìˆ˜í‚¤ì— ë”°ë¼ ë‹¤ë¦„
+			keyValue=getch(); //íŠ¹ìˆ˜ í‚¤ë¥¼ í™•ì¸í•˜ê¸° ìœ„í•´ 2ë²ˆì˜ getch()í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•´ì•¼ í•¨
 		}
 		switch (keyValue){
 		case ESC:
@@ -191,8 +191,8 @@ int getGameAction(void){
   return act;
 }
 
-//Á¾·á°¡ ¾Æ´Ñ »ç¿ëÀÚ ÀÔ·Â¿¡ µû¶ó Çà·Ä³» ºí·ÏÀÇ ÁÂÇ¥°ªÀ» ³»¸°´Ù.
-//Æ² ¹ÛÀ¸·Î ¹ş¾î³¯ ¼ö ¾ø±â ‹š¹®¿¡ ¹üÀ§¸¦ Á¶Á¤ÇÑ´Ù.
+//ì¢…ë£Œê°€ ì•„ë‹Œ ì‚¬ìš©ì ì…ë ¥ì— ë”°ë¼ í–‰ë ¬ë‚´ ë¸”ë¡ì˜ ì¢Œí‘œê°’ì„ ë‚´ë¦°ë‹¤.
+//í‹€ ë°–ìœ¼ë¡œ ë²—ì–´ë‚  ìˆ˜ ì—†ê¸° Â‹Âšë¬¸ì— ë²”ìœ„ë¥¼ ì¡°ì •í•œë‹¤.
 void move(int key){
 	switch (key){
 		case MOVE_LEFT:
@@ -218,8 +218,8 @@ void move(int key){
 	}
 }
 
-// ÀÏÁ¤ÇÑ ÁÖ±â·Î ¶³¾îÁö´Â ÇÔ¼ö Çà·Ä Y°ªÀ» Áõ°¡½ÃÄÑ 
-// ¾Æ·¡·Î ¶³¾îÁö´Â È¿°ú¸¦ ³½´Ù
+// ì¼ì •í•œ ì£¼ê¸°ë¡œ ë–¨ì–´ì§€ëŠ” í•¨ìˆ˜ í–‰ë ¬ Yê°’ì„ ì¦ê°€ì‹œì¼œ 
+// ì•„ë˜ë¡œ ë–¨ì–´ì§€ëŠ” íš¨ê³¼ë¥¼ ë‚¸ë‹¤
 void fall(){
 	if(blockY<19){
 		blockY++;
@@ -229,8 +229,8 @@ void fall(){
 	}
 }
 
-// down¿¡ ÀÇÇØ È¤Àº fall¿¡ ÀÇÇØ ¹Ù´Ú¿¡ µµ´ŞÇÒ °æ¿ì 
-// ºí·°À» ÃÊ±â°ªÀ¸·Î ´ëÀÀ ½ÃÅ² ÈÄ Á¡¼ö¸¦ 10Á¡ Áõ°¡½ÃÅ²´Ù.
+// downì— ì˜í•´ í˜¹ì€ fallì— ì˜í•´ ë°”ë‹¥ì— ë„ë‹¬í•  ê²½ìš° 
+// ë¸”ëŸ­ì„ ì´ˆê¸°ê°’ìœ¼ë¡œ ëŒ€ì‘ ì‹œí‚¨ í›„ ì ìˆ˜ë¥¼ 10ì  ì¦ê°€ì‹œí‚¨ë‹¤.
 void reach(){
 	blockX=START_ARRAYX;
 	blockY=START_ARRAYY-1;
